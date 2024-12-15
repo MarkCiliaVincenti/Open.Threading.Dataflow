@@ -9,11 +9,7 @@ internal class DistinctFilter<T>(
 	: TargetBlockFilter<T>(target, defaultResponseForDuplicate, null)
 {
     private readonly HashSet<T> _set = [];
-#if NET9_0_OR_GREATER
-	private readonly System.Threading.Lock _lock = new();
-#else
-    private readonly object _lock = new();
-#endif
+	private readonly LockBackport _lock = LockFactory.Create();
 
     protected override bool Accept(T messageValue)
 	{
